@@ -10,6 +10,14 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use('/uploads', express.static('uploads'));
+app.get("/uploads/proof/:filename", (req, res) => {
+  const filePath = path.join(__dirname, "uploads/proof", req.params.filename);
+  res.download(filePath, req.params.filename, (err) => {
+    if (err) {
+      res.status(500).send("Error downloading file");
+    }
+  });
+});
 
 connectDB().then(() => {
   // console.log("MongoDB URI:", process.env.DB_URL);
