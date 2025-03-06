@@ -14,16 +14,19 @@ export const Signup = () => {
 
   const submit = async (event) => {
     event.preventDefault();
-    console.log("Sending Data:", signindata); // Debugging step
+    console.log("Sending Data:", { ...signindata, usertype: "user" }); // Debugging
+  
     try {
-        let response = await axios.post("http://localhost:5000/user/register", signindata);
-        setsignindata(response.data);
-        navigate('/celogin')
-        console.table(signindata);
+      let response = await axios.post("http://localhost:5000/user/register", 
+        { ...signindata, usertype: "user" }
+      );
+      console.log("Response Data:", response.data);
+      navigate('/celogin');
     } catch (error) {
-        console.log("Error Response:", error.response); // Debugging step
+      console.log("Error Response:", error.response);
     }
-};
+  };
+  
 
 
   return (

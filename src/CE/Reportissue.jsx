@@ -1,47 +1,54 @@
 import React, { useRef, useState } from "react";
-import axios from "axios"; // Make sure you have imported axios
-import { toast } from "react-hot-toast"; // Ensure toast is used properly
+import axios from "axios"; 
+import { toast } from "react-hot-toast"; 
 
 const ReportIssueForm = () => {
-  let id=localStorage.getItem('id');
-  const token = localStorage.getItem("token"); 
+  const id = localStorage.getItem("id");
+  const token = localStorage.getItem("token");
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
-  const [data, setdata] = useState({}); // ✅ Define the missing state
-  const [refresh, setRefresh] = useState(false);
-// Replace with actual token logic
+  const [data, setData] = useState({
+    des: "",
+    type: "",
+    location: "",
+    proof: null,
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
       setFileName(file.name);
-      setdata((prevData) => ({
+      setData((prevData) => ({
         ...prevData,
-        proof: file, // ✅ Store file in data state
+        proof: file,
       }));
     }
   };
 
-  const handlechange = (event) => {
-    setdata((prevData) => ({
+  const handleChange = (event) => {
+    setData((prevData) => ({
       ...prevData,
       [event.target.name]: event.target.value,
     }));
   };
 
-  const handlesubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    if (isSubmitting) return; // Prevent multiple submissions
+    setIsSubmitting(true);
+
     const formData = new FormData();
     formData.append("userid", id);
-
-    for (const key in data) {
-      if (data[key]) {
-        formData.append(key, data[key]);
-      }
+    formData.append("des", data.des);
+    formData.append("type", data.type);
+    formData.append("location", data.location);
+    if (data.proof) {
+      formData.append("proof", data.proof);
     }
 
     try {
-      let response = await axios.post(
+      const response = await axios.post(
         `http://localhost:5000/user/postcomplaint`,
         formData,
         {
@@ -53,12 +60,14 @@ const ReportIssueForm = () => {
       );
 
       console.log(response.data);
-      setdata({}); // ✅ Reset data after submission
+      setData({ des: "", type: "", location: "", proof: null });
+      setFileName("");
       toast.success("Complaint submitted successfully!");
-      setRefresh(!refresh);
     } catch (error) {
       console.error("Error:", error);
       toast.error("Failed to submit complaint.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -72,14 +81,14 @@ const ReportIssueForm = () => {
         <h2 className="text-2xl font-semibold text-center mb-2">
           Report Issues Seamlessly
         </h2>
-        <form onSubmit={handlesubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block font-medium text-gray-700">Description</label>
             <input
               type="text"
               name="des"
-              value={data.des || ""}
-              onChange={handlechange}
+              value={data.des}
+              onChange={handleChange}
               className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
@@ -87,11 +96,11 @@ const ReportIssueForm = () => {
             <label className="block font-medium text-gray-700">Complaint type</label>
             <select
               name="type"
-              value={data.type || ""}
-              onChange={handlechange}
+              value={data.type}
+              onChange={handleChange}
               className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
-              <option>Select type</option>
+              <option value="">Select type</option>
               <optgroup label="Vehicle">
                 <option>Riding without helmets</option>
                 <option>Reckless driving</option>
@@ -107,8 +116,8 @@ const ReportIssueForm = () => {
             <input
               type="text"
               name="location"
-              value={data.location || ""}
-              onChange={handlechange}
+              value={data.location}
+              onChange={handleChange}
               className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
@@ -132,9 +141,12 @@ const ReportIssueForm = () => {
           <div className="flex justify-between">
             <button
               type="submit"
-              className="w-1/2 px-3 py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition mr-2"
+              className={`w-1/2 px-3 py-2 text-white font-medium rounded-lg transition ${
+                isSubmitting ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+              }`}
+              disabled={isSubmitting}
             >
-              Submit
+              {isSubmitting ? "Submitting..." : "Submit"}
             </button>
             <button
               type="button"

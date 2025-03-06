@@ -12,6 +12,7 @@ import CEUserprofile from './CE/Userprofile.jsx'
 import CEHome from './CE/Home.jsx'
 import Navbar from './CE/Navbar.jsx'
 import Uservcom from './CE/Uservcom.jsx'
+import Sidebar from './Admin/Sidebar.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -29,6 +30,8 @@ createRoot(document.getElementById('root')).render(
       <Route path="/user/ceuserprofile" element={<CEUserprofile />} />
       <Route path="/user/vcomplaint" element={<Uservcom/>} />
     </Route>
+    
+    <Route path="admin/*" element={<Sidebar></Sidebar>} />
   </Routes>
 </BrowserRouter>
 

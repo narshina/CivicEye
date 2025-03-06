@@ -1,38 +1,36 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { RiDeleteBinFill } from "react-icons/ri";
+import { FaEye } from "react-icons/fa";
+import { IoMdDownload } from "react-icons/io";
+
+
 
 const Uservcom = () => {
   const [data, setData] = useState([]);
-  const id = localStorage.getItem("id");
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token"); // Move token declaration here
 
   useEffect(() => {
+    if (!token) {
+      toast.error("Authentication token missing!");
+      return;
+    }
+
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/user/vcom`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setData(response.data);
-        console.log(response.data);
+        const response = await axios.get("http://localhost:5000/user/viewcomplaint", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setData(response.data); // Set response data directly
       } catch (error) {
-        if (error.response) {
-          console.log("Error Data:", error.response.data);
-          console.log("Error Status:", error.response.status);
-          toast.error(error.response.data);
-        } else {
-          console.log("Error Message:", error.message);
-          toast.error("Something went wrong!");
-        }
+        console.error("Error fetching data:", error);
+        toast.error(error.response?.data?.message || "Something went wrong!");
       }
     };
     fetchData();
-  }, [id,token]);
+  }, [token]);
+
   const formatDate = (isoDate) => {
     return new Date(isoDate).toLocaleString("en-US", {
       year: "numeric",
@@ -43,40 +41,103 @@ const Uservcom = () => {
       second: "2-digit",
     });
   };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:5000/user/deletecomplaint/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success("Complaint deleted successfully!");
+      setData(data.filter((complaint) => complaint._id !== id)); // Remove deleted complaint from state
+    } catch (error) {
+      console.error("Error deleting complaint:", error);
+      toast.error(error.response?.data?.message || "Failed to delete complaint");
+    }
+  };
+
+  const handleDownload = async (filename) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/uploads/proof/${filename}`, {
+        responseType: "blob", // Important for handling binary data
+      });
+  
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename); // Download with the correct filename
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      toast.error("Failed to download proof.");
+    }
+  };
   
  
+  
 
   return (
     <div>
       <div className="flex-1 p-12">
-        <div className="bg-white rounded-lg shadow-2xl p-6">
-          <div className="grid grid-cols-6 gap-6 p-4 text-2xl font-bold border-b">
+        <div className="bg-white rounded-lg shadow-2xl p-5">
+          <div className="grid grid-cols-7 gap-6 p-3 text-2xl font-bold border-b">
             <div>Complaint Type</div>
             <div>Description</div>
-            <div>location</div>
+            <div>Location</div>
             <div>Date</div>
-            <div>IProof</div>
+            <div>Proof</div>
+            <div>Status</div>
+            <div>Actions</div>
           </div>
 
           {data.length > 0 ? (
             data.map((user, index) => (
               <div
-                key={index}
-                className={`grid grid-cols-6 gap-8 p-4 ${
-                  index % 2 === 0 ? "bg-white" : "bg-gray-100"
-                }`}
+                key={user._id}
+                className={`grid grid-cols-7 gap-8 p-4 ${index % 2 === 0 ? "bg-white" : "bg-gray-100"}`}
               >
-                <div>{user.complaints.type}</div>
-                <div>{user.complaints.des}</div>
-                <div>{user.complaints.location}</div>
-                <div>{formatDate(user.complaints.createdAt)}</div>
-                <div>{user.complaints.proof}</div>
-                
+                <div>{user.type}</div>
+                <div>{user.des}</div>
+                <div>{user.location}</div>
+                <div>{formatDate(user.createdAt)}</div>
+              <div>
+  {user.proof ? (
+    <div className="flex flex-col gap-2">
+      {/* View Proof */}
+      <a
+              href={`http://localhost:5000/uploads/proof/${user.proof}`}
+        target="_blank" 
+        rel="noopener noreferrer"
+        
+      >
+       <FaEye />
+      </a>
+
+      {/* Download Proof */}
+     
+  <button
+    onClick={() => handleDownload(user.proof)}
+    className="text-green-500 underline"
+  >
+   <IoMdDownload />
+  </button>
+
+    </div>
+  ) : (
+    "No Proof"
+  )}
+</div>
+
+                <div>{user.status}</div>
+                <div className="text-blue-500">
+                  <RiDeleteBinFill onClick={() => handleDelete(user._id)} size={25} className="cursor-pointer" />
+                </div>
               </div>
             ))
           ) : (
             <div className="text-center p-4 text-xl font-medium">
-              No users found.
+              No complaints found.
             </div>
           )}
         </div>
