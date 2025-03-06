@@ -22,6 +22,12 @@ import mongoose from "mongoose";
             type:mongoose.Schema.Types.ObjectId,
             ref:'user'
         },
+        status:{
+            type:String,
+            default:'pending'
+        },
+        
+        
         
         
 

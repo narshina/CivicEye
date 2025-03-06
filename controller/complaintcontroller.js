@@ -25,26 +25,12 @@ const postComplaint = async (req, res) => {
 
 const viewcomplaint = async (req, res) => {
     try {
-        
-
-        const complaints = await complaint.find({ userid:id });
-
-        if (complaints.length === 0) {
-            return res.status(404).json({ message: "No complaints found for this user" });
-        }
-
-        const responsedata = complaints.map(x => ({
-            des: x.des,
-            type: x.type,
-            date: x.date,
-            location: x.location,
-            proof: x.proof
-        }));
-
-        res.status(200).json(responsedata);
+        const userid = req.user.userId; 
+        const complaints = await complaint.find({ userid: userid }); 
+        res.json(complaints);
     } catch (error) {
         console.error(error);
-        return res.status(403).json({ message: "Unauthorized: Invalid token" });
+        return res.status(500).json({ message: "Error fetching complaints" });
     }
 };
 
@@ -66,4 +52,13 @@ const vcom=async(req,res)=>{
 
 
 
-export {postComplaint ,viewcomplaint,vcom};
+const delcomplaint=async(req,res)=>{
+    let id=req.params.id;
+    let response=await complaint.findByIdAndDelete(id);
+    res.json(response);
+
+}
+
+
+
+export {postComplaint ,viewcomplaint,vcom,delcomplaint};

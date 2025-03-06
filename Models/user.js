@@ -32,7 +32,11 @@ let usershema=new mongoose.Schema({
     },
     idproofnumber:{
         type:String
-    }
+    },
+    usertype:{
+        type:String,
+         
+      }
 })
 
 const user=mongoose.model('user',usershema);

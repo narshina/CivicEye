@@ -2,7 +2,7 @@ import express from 'express';
 import { login, register, updateprofile, vprofile } from '../controller/usercontroller.js';
 import { profileUpload ,complaintUpload} from '../multer.js';  // ✅ Corrected import path
 
-import { postComplaint, vcom, viewcomplaint } from '../controller/complaintcontroller.js';
+import { delcomplaint, postComplaint, vcom, viewcomplaint } from '../controller/complaintcontroller.js';
 import verifyToken from '../middleware/auth.js';
 
 
@@ -16,5 +16,6 @@ userRouter.get('/viewcomplaint',verifyToken,viewcomplaint);
 userRouter.get('/viewprofile/:id',verifyToken,vprofile);
 userRouter.get('/vcom',verifyToken,vcom);
 userRouter.put('/updateprofile/:id',profileUpload.single('idproof'),verifyToken,updateprofile);
+userRouter.delete('/deletecomplaint/:id',delcomplaint);
 
 export default userRouter;
