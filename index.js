@@ -4,7 +4,7 @@ import userRouter from './routes/userroutes.js';
 import { connectDB } from './utils/db.js';
 import dotenv from 'dotenv';
 
-dotenv.config();  // Load environment variables at the top
+dotenv.config();  
 
 const app = express();
 app.use(express.json());

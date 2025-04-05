@@ -4,7 +4,7 @@ import path from 'path';
 // Common function for setting storage location dynamically
 const storageConfig = (folder) => multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, `uploads/${folder}/`); // Store files in different subfolders
+        cb(null, `uploads/${folder}/`); 
     },
     filename: (req, file, cb) => {
         cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));

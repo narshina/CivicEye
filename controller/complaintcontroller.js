@@ -45,10 +45,39 @@ const vcom=async(req,res)=>{
             user:response
         })
     }
-    console.log(responsedata);
+    console.log(responsedata);    
     res.json(responsedata);   
 
 }
+
+const vcomdetail=async(req,res)=>{
+   try{
+    let id=req.params.id;
+    let response=await complaint.findById(id);
+    res.json(response)
+    console.log(response);
+   }
+   catch(error){
+         console.log(error);
+         return res.status(500).json({message:"Error fetching complaints"});
+   }   
+}
+const managecom=async(req,res)=>{
+    try{
+        let id=req.params.id
+    console.log(id);
+    console.log(req.body)
+    let response=await complaint.findByIdAndUpdate(id,req.body)
+    console.log(response);
+    
+    }
+
+    catch(e){
+        res.status(500).json(e.message);
+    }
+
+}
+
 
 
 
@@ -61,4 +90,4 @@ const delcomplaint=async(req,res)=>{
 
 
 
-export {postComplaint ,viewcomplaint,vcom,delcomplaint};
+export {postComplaint ,viewcomplaint,vcom,delcomplaint,vcomdetail ,managecom};

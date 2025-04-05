@@ -1,7 +1,8 @@
 import user from "../Models/user.js";
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose"
+import feedback from "../Models/feedback.js";
 
 
 
@@ -31,7 +32,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        const { email, password } = req.body
+        const { email, password ,usertype } = req.body
         let response = await user.findOne({ email: email })
         if (!response) {
             return res.status(500).json("user not found")
@@ -55,6 +56,7 @@ const login = async (req, res) => {
             message: "Login successful",
             token: token,
             _id: response._id,
+            usertype:response.usertype
         });
 
 
@@ -117,10 +119,31 @@ const updateprofile = async (req, res) => {
     }
 };
 
+const vuser=async(req,res)=>{
+    try{
+    let userdetails=await user.find({usertype:"user"});
+    res.json(userdetails);
+    console.log(userdetails);
+    
+    }
+    catch(e){
+        res.status(500).json(e.message)
+    }
+}
+
+const addfeedback=async(req,res)=>{
+    try{
+        let  newfeedback=new feedback(req.body);
+        let savedfeedback=await newfeedback.save();
+    }
+    catch(e){
+        res.status(500).json(e.message)
+
+    }
+}
 
 
 
 
 
-
-export { register, login, vprofile, updateprofile };
+export { register, login, vprofile, updateprofile ,vuser};
