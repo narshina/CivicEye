@@ -9,7 +9,7 @@ import { IoMdDownload } from "react-icons/io";
 
 const Uservcom = () => {
   const [data, setData] = useState([]);
-  const token = localStorage.getItem("token"); // Move token declaration here
+  const token = localStorage.getItem("token"); 
 
   useEffect(() => {
     if (!token) {
@@ -103,7 +103,7 @@ const Uservcom = () => {
                 <div>{formatDate(user.createdAt)}</div>
               <div>
   {user.proof ? (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-row gap-8">
       {/* View Proof */}
       <a
               href={`http://localhost:5000/uploads/proof/${user.proof}`}
@@ -111,16 +111,16 @@ const Uservcom = () => {
         rel="noopener noreferrer"
         
       >
-       <FaEye />
+       <FaEye size={23}/>
       </a>
 
       {/* Download Proof */}
      
   <button
     onClick={() => handleDownload(user.proof)}
-    className="text-green-500 underline"
+    className=""
   >
-   <IoMdDownload />
+   <IoMdDownload  size={23}/>
   </button>
 
     </div>

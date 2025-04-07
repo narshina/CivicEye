@@ -63,7 +63,7 @@ const CEUserprofile = () => {
 
     try {
       let response = await axios.put(
-        `http://localhost:5000/user/updateprofile/${id}`,
+        `https://civiceye-2.onrender.com/user/updateprofile/${id}`,
         formData,
         {
           headers: {

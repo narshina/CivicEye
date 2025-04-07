@@ -17,7 +17,7 @@ export const Signup = () => {
     console.log("Sending Data:", { ...signindata, usertype: "user" }); // Debugging
   
     try {
-      let response = await axios.post("http://localhost:5000/user/register", 
+      let response = await axios.post("https://civiceye-2.onrender.com/user/register", 
         { ...signindata, usertype: "user" }
       );
       console.log("Response Data:", response.data);

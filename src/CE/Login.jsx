@@ -15,7 +15,7 @@ export const CeLogin = () => {
     const submit = async (event) => {
         event.preventDefault();
         try {
-            let response= await axios.post("http://localhost:5000/user/login", logindata,{
+            let response= await axios.post("https://civiceye-2.onrender.com/user/login", logindata,{
                 headers: {
                     "Content-Type": "application/json",
                 }
@@ -24,7 +24,17 @@ export const CeLogin = () => {
         if(response.data){
             localStorage.setItem("id",response.data._id);
             localStorage.setItem("token",response.data.token);
-            navigate("/user");
+            console.log(response.data.usertype);
+            console.log(response.data);
+            
+            
+            if(response.data.usertype==="admin"){
+                navigate("/admin");
+            }
+            else{
+                navigate("/user");
+            }
+            
         }
            
         

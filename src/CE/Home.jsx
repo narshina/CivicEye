@@ -20,8 +20,13 @@ const CEHome = () => {
           <li className="cursor-pointer text-gray-700 hover:text-blue-500 transition duration-300">
             Contact
           </li>
+         
         </ul>
-        <ProfileDropdown />
+     <Link to="/celogin">  <button
+        className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+      >
+       Login
+      </button></Link> 
         </nav>
       {/* Hero Section */}
       <header className="relative bg-gray-900 text-white text-center py-20">
