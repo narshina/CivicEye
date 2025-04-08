@@ -106,7 +106,7 @@ const Uservcom = () => {
     <div className="flex flex-row gap-8">
       {/* View Proof */}
       <a
-              href={`http://localhost:5000/uploads/proof/${user.proof}`}
+              href={`https://civiceye-2.onrender.com/uploads/proof/${user.proof}`}
         target="_blank" 
         rel="noopener noreferrer"
         
