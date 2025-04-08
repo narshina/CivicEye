@@ -19,7 +19,7 @@ const Uservcom = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/user/viewcomplaint", {
+        const response = await axios.get("https://civiceye-2.onrender.com/user/viewcomplaint", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setData(response.data); // Set response data directly
