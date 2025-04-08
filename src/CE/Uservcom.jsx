@@ -57,7 +57,7 @@ const Uservcom = () => {
 
   const handleDownload = async (filename) => {
     try {
-      const response = await axios.get(`http://localhost:5000/uploads/proof/${filename}`, {
+      const response = await axios.get(`https://civiceye-2.onrender.com/uploads/proof/${filename}`, {
         responseType: "blob", // Important for handling binary data
       });
   
