@@ -37,7 +37,7 @@ const Complaintdetail = () => {
   const handleSubmit = async (status) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/user/managecom/${id}`,
+        `https://civiceye-2.onrender.com/user/managecom/${id}`,
         { status }, // Send status as JSON
         {
           headers: {

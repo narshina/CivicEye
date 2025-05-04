@@ -18,7 +18,7 @@ const Complaints = () => {
   
       const fetchData = async () => {
         try {
-          const response = await axios.get("http://localhost:5000/user/vcom", {
+          const response = await axios.get("https://civiceye-2.onrender.com/user/vcom", {
             headers: { Authorization: `Bearer ${token}` },
           });
           setData(response.data); // Set response data directly

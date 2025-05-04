@@ -44,7 +44,7 @@ const Uservcom = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/user/deletecomplaint/${id}`, {
+      const response = await axios.delete(`https://civiceye-2.onrender.com/user/deletecomplaint/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Complaint deleted successfully!");

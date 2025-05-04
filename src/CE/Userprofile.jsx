@@ -14,7 +14,7 @@ const CEUserprofile = () => {
     const fetchdata = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/user/viewprofile/${id}`,
+          `https://civiceye-2.onrender.com/user/viewprofile/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

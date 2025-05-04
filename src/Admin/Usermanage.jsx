@@ -15,10 +15,10 @@ const Usermanage = () => {
   
       const fetchData = async () => {
         try {
-          const response = await axios.get("http://localhost:5000/user/vuser", {
+          const response = await axios.get("https://civiceye-2.onrender.com/user/vuser", {
             headers: { Authorization: `Bearer ${token}` },
           });
-          setData(response.data); // Set response data directly
+          setData(response.data); 
         } catch (error) {
           console.error("Error fetching data:", error);
           toast.error(error.response?.data?.message || "Something went wrong!");
@@ -32,7 +32,7 @@ const Usermanage = () => {
     <div>
       <div className="overflow-x-auto p-4">
             <table className="w-full border-collapse border border-gray-300 shadow-lg">
-              {/* Table Head */}
+            
               <thead className="bg-gray-200">
                 <tr className="text-left text-gray-800">
                   <th className="p-3 border border-gray-300">Name</th>
